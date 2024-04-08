@@ -1,0 +1,36 @@
+#!/usr/bin/bash
+
+######################
+#### Using zenity ####
+######################
+
+#value=$(zenity --width=600 --height=400 --title "Warning" --text "" --list --radiolist --hide-header --column "Buy" --column "Item" TRUE "Shutdown" FALSE "Sleep" FALSE "Restart")
+
+#######################
+#### Using kdialog ####
+#######################
+
+guiWidth=500
+guiHeight=300
+screenWidth=$(xdpyinfo | grep dimensions | awk '{print $2}' | tr "x" " " | awk '{print $1}')
+screenHeight=$(xdpyinfo | grep dimensions | awk '{print $2}' | tr "x" " " | awk '{print $2}')
+xAxis=$((screenWidth/2-guiWidth/2))
+yAxis=$((screenHeight/2-guiHeight/2))
+
+
+value=$(kdialog --radiolist "Choose an option" shutdown "Shutdown" on sleep "Sleep" off reboot "Reboot" off --geometry "$guiWidth"x"$guiHeight"+"$xAxis"+"$yAxis")
+
+
+# echo "Press 1 for shutdown, 2 for sleep."
+# echo -e "Enter Your choice: \c" ; read a
+
+
+if [ "$value" = shutdown ] ; then
+	shutdown now
+elif [ "$value" = sleep ] ; then
+   	systemctl suspend
+elif [ "$value" = reboot ] ; then
+   	reboot
+else
+   	echo ""
+fi

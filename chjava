@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ls /usr/lib/jvm | tr " " "\n" | cat -n
+
+echo -e "\n\tPlease enter index no: \c"
+read newPath
+jPath=$(ls /usr/lib/jvm | tr " " "\n" | cat -n | head "-$newPath" | tail -1 | awk '{print $2}')
+alreadySet=$(cat /home/sonu/.javaPath)
+echo "$jPath"
+if [ "$jPath" = "$(echo $PATH | grep -o $jPath)" ] ; then
+	echo "$jPath is already set"
+fi
+if [ "$jPath" != "$(echo $PATH | grep -o $jPath)" ] ; then
+	echo "export PATH=$PATH ; echo $jPath > /home/sonu/.javaPath" | tr "$alreadySet" "$jPath" | xclip -selection c
+	echo "Press CTRL+SHIFT+V and hit ENTER"
+fi
