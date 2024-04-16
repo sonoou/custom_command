@@ -1,0 +1,31 @@
+#!/bin/bash
+
+ORACLE_OWNER=oracle
+SU=/bin/su
+ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server
+LSNR=$ORACLE_HOME/bin/lsnrctl
+SQLPLUS=$ORACLE_HOME/bin/sqlplus
+
+
+
+if [ "$1" == "start" ]; then
+
+	echo "Starting Oracle Net Listener."
+	$SU -s /bin/bash $ORACLE_OWNER -c "$LSNR  start" > /dev/null
+
+	echo  "Starting Oracle Database 10g Express Edition Instance..."
+	$SU -s /bin/bash  $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/startdb.sql" > /dev/null
+	echo "Started successfully"
+fi
+
+##Stop commands
+
+if [ "$1" == "stop" ]; then
+
+	echo "Shutting down Oracle Database 10g Express Edition Instance."
+	$SU -s /bin/bash $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/stopdb.sql" > /dev/null
+
+	echo "Stopping Oracle Net Listener."
+    $SU -s /bin/bash  $ORACLE_OWNER -c "$LSNR stop" > /dev/null
+	echo "Stopped successfully"
+fi
