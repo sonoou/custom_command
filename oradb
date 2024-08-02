@@ -1,5 +1,6 @@
 #!/bin/bash
 
+clear
 ORACLE_OWNER=oracle
 SU=/bin/su
 ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server
@@ -11,11 +12,12 @@ SQLPLUS=$ORACLE_HOME/bin/sqlplus
 if [ "$1" == "start" ]; then
 
 	echo "Starting Oracle Net Listener."
-	$SU -s /bin/bash $ORACLE_OWNER -c "$LSNR  start" > /dev/null
-
+    $SU -s /bin/bash $ORACLE_OWNER -c "$LSNR  start" > /home/sonu/customCommand/oracle_net_listener.log
 	echo  "Starting Oracle Database 10g Express Edition Instance..."
-	$SU -s /bin/bash  $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/startdb.sql" > /dev/null
+	$SU -s /bin/bash  $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/startdb.sql" > /home/sonu/customCommand/database_instance.log
 	echo "Started successfully"
+	echo "See /home/sonu/customCommand/oracle_net_listener.log for more info"
+	echo "See /home/sonu/customCommand/database_instance.log for more info"
 fi
 
 ##Stop commands

@@ -26,11 +26,15 @@ value=$(kdialog --radiolist "Choose an option" shutdown "Shutdown" on sleep "Sle
 
 
 if [ "$value" = shutdown ] ; then
+	chmod 0000 /error_*.mp4 &> /dev/null
 	shutdown now
 elif [ "$value" = sleep ] ; then
+	chmod 0000 /error_*.mp4 &> /dev/null
    	systemctl suspend
 elif [ "$value" = reboot ] ; then
+	chmod 0000 /error_*.mp4 &> /dev/null
    	reboot
 else
+	chmod 0000 /error_*.mp4 &> /dev/null
    	echo ""
 fi

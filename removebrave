@@ -1,0 +1,17 @@
+#!/bin/bash
+
+apt remove brave-browser -y
+apt purge brave-browser -y
+apt autoremove -y
+rm -rf /home/sonu/.config/BraveSoftware
+find / -name brave* > remove.txt
+find / -name Brave* >> /remove.txt
+
+n=$(cat /remove.txt -n | awk '{print $1}' | tail -1)
+
+for (( i=0 ; i<="$n" ; i++ ));
+do
+	rm -r $(cat /remove.txt | head "-$i" | tail -1)
+done
+
+rm -r /remove.txt

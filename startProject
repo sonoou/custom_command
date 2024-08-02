@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl start postgresql.service
+/home/sonu/Downloads/eclipse/eclipse
+systemctl stop postgresql.service

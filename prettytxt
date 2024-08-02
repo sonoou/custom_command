@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#echo -e "Enter your line : \c"
+#read input
+#echo  $1
+#totalLine=$(echo $1 | wc -l)
+#echo "total lines are $totalLine"
+
+nano /__prettyTemp__
+totalLine=$(cat /__prettyTemp__ | wc -l)
+maxChars=0
+
+for (( i=1 ; i<=$totalLine ; i++))
+do
+	ch=$(cat /__prettyTemp__ | head "-$i" | tail -1 | wc -m)
+	if [ $maxChars -lt $ch ]; then
+		maxChars=$ch
+	fi
+done
+
+printf "┌"
+for (( j=1 ; j<=$maxChars-1 ; j++ ))
+do
+	printf "─"
+done
+printf "┐\n"
+
+for (( i=1 ; i<=$totalLine; i++))
+do
+	space="-"
+	curLineChars=$(cat /__prettyTemp__ | head "-$i" | tail -1 | wc -m)
+	(( finalChars=$maxChars-$curLineChars-1 ))
+	for (( j=1 ; j<=$finalChars ; j++))
+	do
+		space=$(echo "$space-")
+	done
+	space=$(echo $space | awk '{gsub("-"," ");} 1')
+	if [ $finalChars -eq -1 ]; then
+		space=""
+	fi
+	echo "│""$(cat /__prettyTemp__ | head -$i | tail -1)""$space│"
+done
+
+printf "└"
+for (( j=1 ; j<=$maxChars-1 ; j++ ))
+do
+	printf "─"
+done
+printf "┘\n"
+rm /__prettyTemp__

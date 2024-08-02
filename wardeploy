@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+complete_error=$(javac -d WEB-INF/classes *.java 2>&1)
+## echo "$complete_error just after javac" | tail -1 | grep -o error
+err=$(echo "$complete_error" | tail -1 | grep -o error)
+if [ "$err" != "error" ]; then
+	jar cvf s1.war *
+	cp s1.war /home/sonu/Oracle/Middleware/Oracle_Home/user_projects/domains/batch9am/autodeploy/
+	echo "http://localhost:7002/s1"
+else
+	echo "$complete_error"
+fi
