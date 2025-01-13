@@ -1,0 +1,22 @@
+#!/bin/bash
+
+APP_LIST=$(cat /home/sonu/Desktop/Linux_errors/redmi_9_prime_sys_apps.txt)
+LOOP=$(echo "$APP_LIST" | wc -l)
+INSTALLED_APP_LIST=$(adb shell pm -l)
+#echo "$INSTALLED_APP_LIST"
+for (( i=1; i<=$LOOP; i++ )) do
+	APP_DETAILS=$(echo "$APP_LIST" | head "-$i" | tail -1)
+	APP_PACKAGE=$(echo $APP_DETAILS | awk '{print $1}')
+	APP_NAME=$(echo $APP_DETAILS | awk '{print $2}')
+#	echo $APP_NAME
+	if [ -n "$(echo "$INSTALLED_APP_LIST" | grep $APP_PACKAGE)" ]; then
+		echo -e "[FOUND]: \t$APP_NAME"
+		echo -e "[DELETING]: \t$APP_NAME"
+		OUT=$(adb shell pm uninstall -k --user 0 $APP_PACKAGE)
+		if [ "$OUT" == "Success" ]; then
+			echo -e "[DONE]: \t$APP_NAME"
+		fi
+#	else
+#		echo -e "[NOT FOUND]: \t$APP_NAME"
+	fi
+done

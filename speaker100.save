@@ -1,0 +1,12 @@
+#1/usr/bin/bash
+
+echo " "
+while true
+do
+amixer -c 0 set Headphone 9% unmute > /dev/null
+amixer -c 0 set Speaker 100% unmute > /dev/null
+amixer -c 0 set Master 100% unmute  > /dev/null
+echo  "\033[1A Master 100% Speaker 100% Headphone 9%"
+sleep 1 > /dev/null
+done
+heelo

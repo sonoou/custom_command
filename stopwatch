@@ -1,0 +1,38 @@
+#!/bin/bash
+
+MS=0
+SEC=0
+MIN=0
+HR=0
+
+echo "HH:MM:SS"
+while [ 1 ]
+do
+	echo -e "\033[1A"
+	if [ $HR -lt 10 ]; then
+		echo -e "0$HR:\c"
+	else
+		echo -e "$HR:\c"
+	fi
+	if [ $MIN -lt 10 ]; then
+		echo -e "0$MIN:\c"
+	else
+		echo -e "$MIN:\c"
+	fi
+	if [ $SEC -lt 10 ]; then
+		echo -e "0$SEC\c"
+	else
+		echo -e "$SEC\c"
+	fi
+
+	sleep 1
+	(( SEC++ ))
+	if [ $SEC -eq 60 ]; then
+		SEC=0
+		(( MIN++ ))
+		if [ $MIN -eq 60 ]; then
+			(( HR++ ))
+			MIN=0
+		fi
+	fi
+done

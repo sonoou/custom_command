@@ -1,0 +1,9 @@
+#!/bin/bash
+
+WIN_INFO=$(xdotool getmouselocation --shell)
+WIN_ID=$(echo "$WIN_INFO" | tail -1 | tr "=" " " | awk '{print $2}')
+WIN_SIZE_X=$(echo "$WIN_INFO" | head -1 | tr "=" " " | awk '{print $2}')
+WIN_SIZE_Y=$(echo "$WIN_INFO" | head -2 | tail -1 | tr "=" " " | awk '{print $2}')
+
+xdotool mousemove 0 0 --window "$WIN_ID"
+echo "$WIN_INFO, $WIN_ID, $WIN_SIZE_X, $WIN_SIZE_Y"

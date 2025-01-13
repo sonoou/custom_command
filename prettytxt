@@ -18,12 +18,14 @@ do
 	fi
 done
 
-printf "┌"
+HEAD_CAP=$(printf "┌")
 for (( j=1 ; j<=$maxChars-1 ; j++ ))
 do
-	printf "─"
+	HEAD_CAP=$(printf "$HEAD_CAP─")
 done
-printf "┐\n"
+HEAD_CAP=$(printf "$HEAD_CAP┐\n")
+
+echo -e "$HEAD_CAP"
 
 for (( i=1 ; i<=$totalLine; i++))
 do
@@ -38,13 +40,15 @@ do
 	if [ $finalChars -eq -1 ]; then
 		space=""
 	fi
-	echo "│""$(cat /__prettyTemp__ | head -$i | tail -1)""$space│"
+	echo "│$(cat /__prettyTemp__ | head -$i | tail -1)$space│"
+#	echo "│""$(cat /__prettyTemp__ | head -$i | tail -1)""$space│"
 done
 
-printf "└"
-for (( j=1 ; j<=$maxChars-1 ; j++ ))
-do
-	printf "─"
-done
-printf "┘\n"
+#printf "└"
+#for (( j=1 ; j<=$maxChars-1 ; j++ ))
+#do
+#	printf "─"
+#done
+#printf "┘\n"
+printf "$HEAD_CAP" | awk '{gsub("┌","└");} 1' | awk '{gsub("┐","┘");} 1'
 rm /__prettyTemp__

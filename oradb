@@ -1,33 +1,60 @@
 #!/bin/bash
 
-clear
-ORACLE_OWNER=oracle
-SU=/bin/su
+SAVE_LLP=$LD_LIBRARY_PATH
+RETVAL=0
 ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server
+ORACLE_OWNER=oracle
+ORACLE_SID=XE
 LSNR=$ORACLE_HOME/bin/lsnrctl
 SQLPLUS=$ORACLE_HOME/bin/sqlplus
+SU=/bin/su
+export ORACLE_HOME
+export ORACLE_SID
+export PATH=$ORACLE_HOME/bin:$PATH
+LOG="$ORACLE_HOME_LISTNER/listener.log"
 
+export LC_ALL=C
 
 
 if [ "$1" == "start" ]; then
-
-	echo "Starting Oracle Net Listener."
-    $SU -s /bin/bash $ORACLE_OWNER -c "$LSNR  start" > /home/sonu/customCommand/oracle_net_listener.log
-	echo  "Starting Oracle Database 10g Express Edition Instance..."
-	$SU -s /bin/bash  $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/startdb.sql" > /home/sonu/customCommand/database_instance.log
-	echo "Started successfully"
-	echo "See /home/sonu/customCommand/oracle_net_listener.log for more info"
-	echo "See /home/sonu/customCommand/database_instance.log for more info"
+	echo -e "\033[38;7;5m\033[1;38;5;2m[Starting Database]...\033[0m"
+	status=`ps -ef | grep tns | grep oracle`
+	if [ "$status" == "" ]
+	then
+		if [ -f $ORACLE_HOME/bin/tnslsnr ]; then
+		     	#echo "Starting Oracle Net Listener."
+        		$SU -s /bin/bash $ORACLE_OWNER -c "$LSNR  start" > /dev/null 2>&1
+		fi
+	fi
+	#echo "Starting Oracle Database 10g Express Edition Instance."
+	$SU -s /bin/bash  $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/startdb.sql" > /dev/null 2>&1
+    RETVAL=$?
+    if [ $RETVAL -eq 0 ]; then
+		echo -e "\033[1A\033[1;38;5;2m[Starting Database]..."
+        echo -e "\033[38;7;5m\033[1;38;5;2mDatabase is RUNNING"
+    else
+        echo Failed to start Oracle Net Listener using $ORACLE_HOME/bin/tnslsnr\
+ 	      and Oracle Express Database using $ORACLE_HOME/bin/sqlplus.
+    fi
 fi
 
 ##Stop commands
 
 if [ "$1" == "stop" ]; then
+	echo "Stopping database"
+    # Stop Oracle 10g Express Edition Database and Listener
+    #echo Shutting down Oracle Database 10g Express Edition Instance.
+	$SU -s /bin/bash $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/stopdb.sql" > /dev/null 2>&1
+	#echo Stopping Oracle Net Listener.
+    $SU -s /bin/bash  $ORACLE_OWNER -c "$LSNR stop" > /dev/null 2>&1
+	RELVAL=$?
+	if [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$LSNR
+	then
+		#return $RETVAL
+		echo -e "\033[1;38;5;2mDatabase is Stopped"
+	fi
+fi
 
-	echo "Shutting down Oracle Database 10g Express Edition Instance."
-	$SU -s /bin/bash $ORACLE_OWNER -c "$SQLPLUS -s /nolog @$ORACLE_HOME/config/scripts/stopdb.sql" > /dev/null
-
-	echo "Stopping Oracle Net Listener."
-    $SU -s /bin/bash  $ORACLE_OWNER -c "$LSNR stop" > /dev/null
-	echo "Stopped successfully"
+if [ "$1" == "status" ]; then
+	$SU -s /bin/bash $ORACLE_OWNER -c "$LSNR status"
 fi

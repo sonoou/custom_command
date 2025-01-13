@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+
+preArray=("atk" "freedesktop/bindings" "freedesktop/cairo" "freedesktop/enchant" "freedesktop/icons" "gdk" "glib" "gtk" "notify" "pango" "rsvg" "screeshot" "sourceview" "unixprint")
+
+for (( i = 1; i <= 658 ; i++ ))
+do
+	j=-1
+	url=$(cat /home/sonu/Desktop/java_gnome_doc/allclass.html | grep "<a" | head -"$i" | tail -1 | awk '{print $2}' | tr "=" " " | awk '{print $2}' | awk '{gsub("\"","")} 1')
+	className=$(cat /home/sonu/Desktop/java_gnome_doc/All_java_gnome.txt | head -"$i" | tail -1)
+	while [[ $j -lt 14 ]]
+	do
+		((j++))
+		if [[ -n "$(echo $url | grep ${preArray[$j]})" ]]
+		then
+#			echo $className | grep -o ${preArray[$j]}
+			break;
+		fi
+	done
+#	prefix=$(echo ${preArray[$j]})
+	fullURL="https://java-gnome.sourceforge.net/doc/api/4.1/""$url"
+	cutycapt --url=$fullURL --out=/home/sonu/Desktop/java_gnome_doc/${preArray[$j]}/$className.html
+	echo "$fullURL [OK]"
+	sleep 1
+done

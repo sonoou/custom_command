@@ -9,9 +9,10 @@ find / -name Brave* >> /remove.txt
 
 n=$(cat /remove.txt -n | awk '{print $1}' | tail -1)
 
-for (( i=0 ; i<="$n" ; i++ ));
+for (( i=0 ; i<=$n ; i++ ));
 do
-	rm -r $(cat /remove.txt | head "-$i" | tail -1)
+	rmname=$(cat /remove.txt | head "-$i" | tail -1)
+	echo $rmname
+	rm -r $rmname
 done
 
-rm -r /remove.txt

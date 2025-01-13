@@ -1,16 +1,68 @@
 #!/bin/bash
 
-ls /usr/lib/jvm | tr " " "\n" | cat -n
-
-echo -e "\n\tPlease enter index no: \c"
-read newPath
-jPath=$(ls /usr/lib/jvm | tr " " "\n" | cat -n | head "-$newPath" | tail -1 | awk '{print $2}')
-alreadySet=$(cat /home/sonu/.javaPath)
-echo "$jPath"
-if [ "$jPath" = "$(echo $PATH | grep -o $jPath)" ] ; then
-	echo "$jPath is already set"
+INSTALLED_JDKS=$(ls /usr/lib/jvm | tr " " "\n" | cat -n)
+TOTAL_JDKS=$(echo "$INSTALLED_JDKS" | tail -1 | awk '{print $1}')
+OUT=$(javac -version 2>&1)
+if [ "$(echo $OUT | grep -o javac)" != "javac" ]; then
+	OUT=$(javac --version 2>&1)
 fi
-if [ "$jPath" != "$(echo $PATH | grep -o $jPath)" ] ; then
-	echo "export PATH=$PATH ; echo $jPath > /home/sonu/.javaPath" | tr "$alreadySet" "$jPath" | xclip -selection c
-	echo "Press CTRL+SHIFT+V and hit ENTER"
+currPath=$(echo "$OUT" | awk '{print $2}')
+CURR_JDK_NUM=$(echo "$INSTALLED_JDKS" | grep "$currPath" | awk '{print $1}')
+INSTALLED_JDKS_COLOR=""
+for (( i=1; i<=$TOTAL_JDKS; i++ ))
+do
+	JDK=$(echo "$INSTALLED_JDKS" | head "-$i" | tail -1)
+	if [ -n "$(echo $JDK | grep $currPath)" ]; then
+		#echo -e "\033[1;38;5;10m$JDK\033[0m"
+		INSTALLED_JDKS_COLOR=$(echo "$INSTALLED_JDKS_COLOR\n\033[1;38;5;10m$JDK\033[0m")
+	else
+		#echo "$JDK"
+		INSTALLED_JDKS_COLOR=$(echo "$INSTALLED_JDKS_COLOR\n$JDK")
+	fi
+done
+echo -e "$INSTALLED_JDKS_COLOR"
+echo -e "\n\tPlease enter index no: \c"
+
+read newPath
+jPath=$(echo "$INSTALLED_JDKS" | head "-$newPath" | tail -1 | awk '{print $2}')
+
+#if [ $newPath -eq 0 ]; then
+#	echo "Don't try that again. I'll show you no mercy."
+#	if [ "$(pgrep chjava | wc -l)" == "2" ]; then
+#		echo "You will pay for that"
+#		echo "Computer will shutdown in 10 seconds."
+#		for(( i=10; i>=0; i-- ))
+#		do
+#			echo -e "\033[1A $i"
+#			sleep 1
+#		done
+#		echo "It was a prank"
+#	fi
+#	chjava
+#	exit
+#el
+if [ -n "$(echo $jPath | grep $currPath)" ]; then
+	echo "This JDK $jPath already in PATH variable. choose different" 
+	chjava
+	exit
+fi
+
+rm -r /usr/lib/my-default-jdk/*
+ln -s /usr/lib/jvm/$jPath/bin/* /usr/lib/my-default-jdk/
+
+# check version
+echo "javac output:"
+OUT=$(javac -version 2>&1)
+if [ "$(echo $OUT | grep -o javac)" == "javac" ]; then
+	echo "$OUT"
+else
+	javac --version
+fi
+echo
+echo "java output:"
+OUT=$(java -version 2>&1)
+if [ "$(echo $OUT | grep -o java)" == "java" ]; then
+	echo "$OUT"
+else
+	java --version
 fi

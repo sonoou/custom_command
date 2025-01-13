@@ -1,21 +1,50 @@
 #!/usr/bin/bash
 
-clear
 DOM_HOME=/home/sonu/Oracle/Middleware/Oracle_Home/user_projects/domains
 export TZ=IST
-if [ "$1" == "start" ]; then
-	ls $DOM_HOME | tr " " "\n" | cat -n
-	TOTAL_DOM=$(ls $DOM_HOME | tr " " "\n" | cat -n | awk '{print $1}' | tail -1)
-	echo -e "Which one(number): \c"
-	read no
-	if [ $no -lt 1 ] || [ $no -gt $TOTAL_DOM ]; then
-		echo "Wrong input"
-		exit 0
-	fi
-	DOM=$(ls $DOM_HOME | tr " " "\n" | cat -n | head "-$no" | tail -1 | awk '{print $2}')
-	$DOM_HOME/$DOM/startWebLogic.sh
-fi
 
-if [ "$1" == "config" ]; then
+askDom(){
+	ls $DOM_HOME | tr " " "\n" | cat -n
+	TOTAL_DOM=$(ls $DOM_HOME | tr " " "\n" | wc -l)
+	echo -e "Which one(number): \c"
+	read NO
+
+	if [ -z "$NO" ];then
+		echo "Wrong input"
+		exit
+	else
+		if (( $NO < 1  ||  $NO > $TOTAL_DOM )); then
+			echo "Wrong input"
+			exit
+		else
+			DOM=$(ls $DOM_HOME | tr " " "\n" | head "-$NO" | tail -1)
+			echo "$DOM"
+		fi
+	fi
+}
+
+error(){
+	echo Invalid argument: "$1"
+	echo available options
+	echo "     start     shows all the domain names, ask you which one you want to start"
+	echo "     stop      shows all the domain names, ask you which one you want to start"
+	echo "     config    start configration of server"
+	exit 0
+}
+
+if [ -z "$1" ]; then
+	error
+
+elif [ "$1" == "start" ]; then
+	askDom
+	$DOM_HOME/$DOM/startWebLogic.sh
+
+elif [ "$1" == "config" ]; then
 	$DOM_HOME/../../oracle_common/common/bin/config.sh
+
+elif [ "$1" == "stop" ]; then
+	askDom
+	$DOM_HOME/$DOM/bin/stopWebLogic.sh
+else
+	error
 fi

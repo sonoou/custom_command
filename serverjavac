@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd $1
+SOURCE_FILE=$(ls *.java | tr " " "\n")
+#javac $SOURCE_FILE 2> execout.txt
+OUT=$(javac $SOURCE_FILE 2>&1)
+if [ -z "$OUT" ]; then
+	chmod -R 777 $1
+	CLASS_LIST=$(ls *.class | grep '\$' -v)
+	RE_CLASS_LIST=$(echo "$CLASS_LIST" | grep -i main.class)
+	RE_CLASS_LIST="$RE_CLASS_LIST\n$(echo "$CLASS_LIST" | grep -i 'main.class' -v)"
+	CLASS_LIST=$(echo -e "$RE_CLASS_LIST" | tr "." " " | awk '{print $1}')
+	LOOP=$(echo "$CLASS_LIST" | wc -l)
+	for(( i=1; i<=$LOOP; i++ ))
+	do
+		CLASS_NAME=$(echo "$CLASS_LIST" | head "-$i" | tail -1)
+		MAIN=$(javap $CLASS_NAME | grep main)
+		if [ -n "$MAIN" ]; then
+#			java $CLASS_NAME >> execout.txt 2>> execout.txt
+			OUT=$(java $CLASS_NAME 2>&1)
+			echo "$OUT"
+		fi
+	done
+else
+	echo "$OUT"
+fi
