@@ -1,34 +1,53 @@
 #!/bin/bash
 
-xdotool mousemove 100 550
+XAXIS=100
+YAXIS=520
+
+MTIME="0.1"
+
+xdotool mousemove $XAXIS $YAXIS
 xdotool click 1
-sleep 0.1
-xdotool mousemove 180 600
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 80 )) $(( YAXIS + 55 ))
+sleep $MTIME
 xdotool click 1
+sleep $MTIME
 xdotool key BackSpace
-#sleep 0.5
+sleep $MTIME
 xdotool type "Cantarell"
-#sleep 0.5
+sleep $MTIME
 xdotool key Return
-sleep 0.4
+sleep $MTIME
 xdotool key Escape
-sleep 0.4
-xdotool mousemove 1090 690
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 1000 )) $(( YAXIS + 150 ))
+sleep $MTIME
 xdotool click 1
-xdotool mousemove 890 690
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 790 )) $(( YAXIS + 150 ))
+sleep $MTIME
 xdotool click 1
-sleep 0.1
-xdotool mousemove 890 770
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 790 )) $(( YAXIS + 220 ))
+sleep $MTIME
 xdotool click 1
-xdotool mousemove 990 691
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 890 )) $(( YAXIS + 150 ))
+sleep $MTIME
 xdotool click 1
-xdotool type "0.9"
-sleep 0.4
+sleep $MTIME
+xdotool type "0.8"
+sleep $MTIME
 xdotool key Return
-sleep 0.1
-xdotool mousemove 990 770
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 890 )) $(( YAXIS + 230 ))
+sleep $MTIME
 xdotool click 1
+sleep $MTIME
 xdotool type 0
+sleep $MTIME
 xdotool key Return
-xdotool mousemove 1090 690
+sleep $MTIME
+xdotool mousemove $(( XAXIS + 1000 )) $(( YAXIS + 150 ))
+sleep $MTIME
 xdotool click 1

@@ -1,0 +1,88 @@
+#!/bin/bash
+
+PIPE="/tmp/space_key_pipe"
+
+# Create FIFO if it doesn’t exist
+if [[ ! -p $PIPE ]]; then
+    mkfifo $PIPE
+fi
+
+listen_for_space() {
+    DEVICE_ID=11
+
+    xinput test $DEVICE_ID | while read -r line; do
+        if [[ "$line" == *"key press   65"* ]]; then
+            echo "true" > $PIPE
+        fi
+    done
+}
+
+listen_for_space &  # Run listener in the background
+
+# Get the background process ID (PID)
+LISTENER_PID=$!
+
+# Function to clean up on CTRL+C
+cleanup() {
+    echo "Stopping background process..."
+		echo "$LISTENER_PID"
+    kill $LISTENER_PID 2>/dev/null
+    rm -f $PIPE  # Remove FIFO file if needed
+    exit 0
+}
+
+# Trap CTRL+C (SIGINT) and call cleanup()
+trap cleanup SIGINT
+
+DIR_NAME="/home/sonu/Desktop/java_gnome/java_gnome_doc"
+LINK_PREFIX="https://java-gnome.sourceforge.net/doc/api/4.1"
+
+xdotool mousemove 900 500
+sleep 0.5
+xdotool click 1
+
+for FILE_NAME in $(cat "$DIR_NAME/allclass.html")
+do
+	FILE_DIR=$(dirname $FILE_NAME)
+	ABSOLUTE_FILE_DIR="$DIR_NAME/$FILE_DIR"
+
+	echo "$LINK_PREFIX/$FILE_NAME" | xclip -selection c
+	xdotool key Ctrl+t
+	sleep 0.5
+	xdotool key Ctrl+v
+	sleep 0.5
+	xdotool key Return
+	while true; do
+	    if read -t 1 SPACE_PRESSED < $PIPE; then
+					echo "$ABSOLUTE_FILE_DIR" | xclip -selection c
+					xdotool mousemove 1820 70
+					sleep 0.5
+					xdotool click 1
+					sleep 0.5
+					xdotool mousemove 1800 110
+					sleep 0.5
+					xdotool click 1
+					sleep 0.5
+					xdotool mousemove 1550 900
+					sleep 0.5
+					xdotool click 1
+					sleep 0.5
+					xdotool mousemove 1600 850
+					sleep 0.5
+					xdotool key Ctrl+l
+					sleep 0.5
+					xdotool key Ctrl+v
+					sleep 0.5
+					xdotool key Return
+					sleep 0.5
+					xdotool click 1 
+					break;
+	    fi
+	done
+	sleep 0.5
+	xdotool click 1
+	sleep 0.5
+	xdotool key Ctrl+w
+	sleep 0.5
+	echo "$FILE_NAME"
+done

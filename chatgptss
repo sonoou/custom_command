@@ -1,0 +1,76 @@
+#!/bin/bash
+
+if [ "$1" == "test" ]; then
+	j=$3
+	xdotool mousemove 1100 500
+	sleep 1
+	xdotool click 1
+	while (( j>0 ))
+	do
+		sleep 2
+		for (( i=1 ; i<=$2 ; i++ ))
+		do
+			xdotool click 5
+		done
+		(( j-- ))
+	done
+	exit
+fi
+
+listen_for_escape() {
+    # Use device ID you verified earlier (e.g., 11 for your internal keyboard)
+    device_id=11
+
+    # Start capturing events from the keyboard device
+    xinput test $device_id | while read -r line; do
+        # Check if the key event corresponds to the Escape key (keycode 9)
+        if [[ "$line" == *"key press   9"* ]]; then
+    	      # Send a signal to stop the main loop and background process
+						echo "escape pressed"
+						killall chatgptss
+        fi
+    done
+}
+
+# Start the listen_for_escape function in the background
+listen_for_escape &
+
+if [ "$1" == "scroll" ]; then
+	SCROLL=$2
+fi
+CURRENT_TIME=$(date +"%d%b%Y_%I%M%p")
+#echo $CURRENT_TIME
+USER_NAME=$(uname -n)
+#echo $USER_NAME
+SSDIR=$(echo "/home/sonu/Pictures/Screenshots" )
+#echo $SSDIR
+CHAT_SSDIR=$(echo "$SSDIR/$CURRENT_TIME" )
+#echo $CHAT_SSDIR
+mkdir -p $CHAT_SSDIR
+chmod 777 $CHAT_SSDIR
+NUM=0
+xdotool mousemove 1100 500
+sleep 1
+xdotool click 1
+while true;
+do
+	xdotool key Print
+  sleep 0.5
+	xdotool key space
+	sleep 0.5
+	CURRENT_IMAGE=$(echo "$SSDIR/$(ls $SSDIR -r | head -1 | tail -1)")
+#	echo "CURRENT_IMAGE: ${CURRENT_IMAGE}"
+#	echo "CHAT_SSDIR: $CHAT_SSDIR/$NUM.png"
+	mv "$CURRENT_IMAGE" "$CHAT_SSDIR/$NUM.png"
+	echo $NUM
+	(( NUM++ ))
+	sleep 0.5
+	xdotool mousemove 965 700
+	sleep 0.5
+	for (( i=1 ; i<=$SCROLL ; i++ ))
+	do
+		xdotool click 5
+	done
+	sleep 0.5
+done
+

@@ -1,0 +1,60 @@
+##############################
+#### Customize Bootloader ####
+##############################
+
+
+OriginalBackup(){
+	# echo "Backing up original theme.txt file"
+	# cat /boot/grub/themes/kali/theme.txt > /boot/grub/themes/kali/theme_bak.txt
+	# echo "Backing up orginal images"
+	# cp /boot/grub/themes/kali/grub-16x9.png /boot/grub/themes/kali/grub-16x9_bak.png
+	# cp /usr/share/grub/themes/kali/grub-16x9.png /usr/share/grub/themes/kali/grub-16x9_bak.png
+	# cp /boot/grub/themes/kali/grub-4x3.png /boot/grub/themes/kali/grub-4x3_bak.png
+	# cp /usr/share/grub/themes/kali/grub-4x3.png /usr/share/grub/themes/kali/grub-4x3_bak.png
+	PARENT_DIR=$(dirname $1)
+	FILE_NAME=$(basename $1)
+	EXT="${FILE_NAME##*.}"
+	if [ -f $1 ]; then
+		echo "Backing up $FILE_NAME : $PARENT_DIR"
+		cp "$1" "$PARENT_DIR/$FILE_NAME_bak.$EXT"
+		echo "Done" 
+	else
+		echo "$1 does not exist"
+	fi
+}
+
+# replace image
+ChangeImage(){
+	echo "Changing image"
+	cp $1 /boot/grub/themes/kali/grub-16x9.png
+	cp $1 /usr/share/grub/themes/kali/grub-16x9.png
+	cp $1 /boot/grub/themes/kali/grub-4x3.png
+	cp $1 /usr/share/grub/themes/kali/grub-4x3.png
+	echo "Done"
+}
+
+ChangeTheme(){
+	cat /home/sonu/Desktop/restore_kali/theme.txt > /boot/grub/themes/kali/theme.txt
+}
+
+
+if [ -n "$1" ]; then
+
+	if echo "${1##*.}" | grep -qi "^png$"; then
+		OriginalBackup "/boot/grub/themes/kali/theme.txt"
+		OriginalBackup "/boot/grub/themes/kali/grub-16x9.png"
+		OriginalBackup "/boot/grub/themes/kali/grub-4x3.png"
+		OriginalBackup "/usr/share/grub/themes/kali/grub-16x9.png"
+		OriginalBackup "/usr/share/grub/themes/kali/grub-4x3.png"
+		ChangeImage $1
+
+	else
+		echo "Image must be in png format."
+		echo "I mean, changing file name.jpg to name.png isn't gonna work"
+		echo "Command will accept the file but at boot time it'll not be shown."
+	fi
+else
+	echo "Invalid argument: $1"
+	echo "Usage: bootCustomize image_file_name.png"
+fi
+

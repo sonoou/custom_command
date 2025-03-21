@@ -1,11 +1,5 @@
 #!/usr/bin/bash
 
-
-
-
-
-
-
 if [ "$1" == "--refresh" ]; then
     echo -e "Enter your enrollment no: \c"
     read -s enroll
@@ -14,8 +8,20 @@ if [ "$1" == "--refresh" ]; then
     curl -sS  "https://gradecard.ignou.ac.in/gradecard/view_gradecard.aspx?eno=$enroll&prog=BCA&type=1" > /__result__.txt
 fi
 
-echo -e "Enter subject code: \c"
-read subj
+#echo -e "Enter subject code: \c"
+#read subj
 
+TAIL=50
+HEAD=$(( 338 - 50 ))
+TAIL=$(( 288 - 215 ))
+FILTER_ONE=$(cat /__result__.txt | head "-$HEAD" | tail "-$TAIL")
+#echo "$FILTER_ONE"
+#exit
 echo -e "\033[1;38;5;2m  Sub. Code       Assign.   Theory     Practical         STATUS\033[0m"
-cat /__result__.txt | grep -i "$subj" | awk '{print $4,$7,$22,$25,$28,$29}' | awk '{gsub("size=\"4\">","   ");gsub(">",""); gsub("font","  "); gsub("<",""); gsub("td"," "); gsub("/","") } 1'
+FILTER_SECOND=$(echo "$FILTER_ONE" | awk '{print $4,$7,$22,$25,$28,$29}' | awk '{gsub("size=\"4\">","   ");gsub(">",""); gsub("font","  "); gsub("<",""); gsub("td"," "); gsub("/",""); gsub("or=\"#EFF3FB\"",""); gsub("or=\"White\"","")} 1')
+TOTAL_LINE=$(echo "$FILTER_SECOND" | wc -l)
+
+for (( i=1; i<=$TOTAL_LINE; i=$i+2 ))
+do
+	echo "$FILTER_SECOND" | head "-$i" | tail -1
+done

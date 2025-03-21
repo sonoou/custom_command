@@ -13,36 +13,33 @@ for (( i=1; i<=$TOTAL_JDKS; i++ ))
 do
 	JDK=$(echo "$INSTALLED_JDKS" | head "-$i" | tail -1)
 	if [ -n "$(echo $JDK | grep $currPath)" ]; then
-		#echo -e "\033[1;38;5;10m$JDK\033[0m"
 		INSTALLED_JDKS_COLOR=$(echo "$INSTALLED_JDKS_COLOR\n\033[1;38;5;10m$JDK\033[0m")
 	else
-		#echo "$JDK"
 		INSTALLED_JDKS_COLOR=$(echo "$INSTALLED_JDKS_COLOR\n$JDK")
 	fi
 done
 echo -e "$INSTALLED_JDKS_COLOR"
+echo -e "     5  Exit"
 echo -e "\n\tPlease enter index no: \c"
 
 read newPath
+if echo "$newPath" | grep -q '[^0-9]'; then
+	echo -e "\tonly number is allowed"
+	chjava
+	exit
+elif [ -z "$newPath" ]; then
+	echo -e "\tonly number is allowed"
+	chjava
+	exit
+elif [ $newPath -eq 5 ]; then
+	echo "Bye"
+	exit
+fi
+
 jPath=$(echo "$INSTALLED_JDKS" | head "-$newPath" | tail -1 | awk '{print $2}')
 
-#if [ $newPath -eq 0 ]; then
-#	echo "Don't try that again. I'll show you no mercy."
-#	if [ "$(pgrep chjava | wc -l)" == "2" ]; then
-#		echo "You will pay for that"
-#		echo "Computer will shutdown in 10 seconds."
-#		for(( i=10; i>=0; i-- ))
-#		do
-#			echo -e "\033[1A $i"
-#			sleep 1
-#		done
-#		echo "It was a prank"
-#	fi
-#	chjava
-#	exit
-#el
 if [ -n "$(echo $jPath | grep $currPath)" ]; then
-	echo "This JDK $jPath already in PATH variable. choose different" 
+	echo -e "\nThis JDK $jPath is already in PATH variable. \nchoose different\c" 
 	chjava
 	exit
 fi
