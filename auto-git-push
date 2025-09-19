@@ -23,7 +23,7 @@ make_push(){
 
 for(( i=0 ; i<=${#MYGIT_DIR[@]} ; i++ ))
 do
-	cd "${MYDIR_ROOT}/${MYGIT_DIR[0]}"
+	cd "${MYDIR_ROOT}/${MYGIT_DIR[i]}"
 	make_push "${MYGIT_REPO[i]}"
 done
 

@@ -40,3 +40,8 @@ To add an exception for this directory, call:
 
 [19Sep2025, 01:29PM]
 Pushing objects to custom_command
+fatal: unable to access 'https://github.com/sonoou/custom_command.git/': Could not resolve host: github.com
+
+
+[19Sep2025, 01:32PM]
+Pushing objects to custom_command
