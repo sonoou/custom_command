@@ -49,7 +49,7 @@ make_push(){
 			echo "pushed successfully"
 		fi
 	else
-		echo "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		echo "\033[1;38;5;9m[ERROR]:\033[0m see logs $MYDIR_ROOT/customCommand/auto-git-push-log.txt"
 		exit 1
 	fi
 
