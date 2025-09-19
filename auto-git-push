@@ -8,7 +8,7 @@ MYGIT_DIR=(customCommand Desktop/Java_Manish_sir Desktop/myprojects Desktop/Book
 MYGIT_REPO=(custom_command Java_Practice myprojects C_lang)
 
 make_push(){
-	#echo -e "Pushing objects to ${1} \t\t\c"
+	echo -e "Pushing objects to ${1} \t\t\c"
 	TIME="$(date +'%d%b%Y, %I:%M%p')"
 	echo "[${TIME}]" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 	echo "Pushing objects to ${1}" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
@@ -23,6 +23,7 @@ make_push(){
 
 for(( i=0 ; i<=${#MYGIT_DIR[@]} ; i++ ))
 do
+	echo "going to ${MYDIR_ROOT}/${MYGIT_DIR[i]}"
 	cd "${MYDIR_ROOT}/${MYGIT_DIR[i]}"
 	make_push "${MYGIT_REPO[i]}"
 done
