@@ -45,3 +45,16 @@ fatal: unable to access 'https://github.com/sonoou/custom_command.git/': Could n
 
 [19Sep2025, 01:32PM]
 Pushing objects to custom_command
+fatal: unable to access 'https://github.com/sonoou/custom_command.git/': Could not resolve host: github.com
+
+
+[19Sep2025, 02:17PM]
+Pushing objects to custom_command
+fatal: detected dubious ownership in repository at '/home/sonu/customCommand'
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory /home/sonu/customCommand
+
+
+[19Sep2025, 02:23PM]
+Pushing objects to custom_command
