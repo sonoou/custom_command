@@ -20,12 +20,12 @@ make_push(){
 	TIME="$(date +'%d%b%Y, %I:%M%p')"
 	echo "[${TIME}]" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 
-	echo "adding objects to ${1}" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+	echo "adding objects to ${1}.git" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 	git add *
 	if [ $? -eq 0 ]; then
 		if [ "${VERBOOSE}" == "true" ]; then
 			echo "added successfully"
-			echo "commiting object to ${1}"
+			echo "commiting object to ${1}.git"
 		fi
 	else
 		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
@@ -36,10 +36,10 @@ make_push(){
 	if [ $? -eq 0 ]; then
 		if [ "${VERBOOSE}" == "true" ]; then
 			echo "commited successfully"
-			echo "pushing object to ${1}"
+			echo "pushing object to ${1}.git"
 		fi
 	else
-		echo "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
 		exit 1
 	fi
 
@@ -49,7 +49,7 @@ make_push(){
 			echo "pushed successfully"
 		fi
 	else
-		echo "\033[1;38;5;9m[ERROR]:\033[0m see logs $MYDIR_ROOT/customCommand/auto-git-push-log.txt"
+		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs $MYDIR_ROOT/customCommand/auto-git-push-log.txt"
 		exit 1
 	fi
 
