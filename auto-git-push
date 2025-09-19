@@ -2,23 +2,58 @@
 
 VERBOOSE="false"
 
+if [ -n "$(echo $1 | grep -i true)" ]; then
+	VERBOOSE="true"
+else
+	VERBOOSE="false"
+fi
+
 MYDIR_ROOT="/home/sonu"
 MYGIT_ROOT="github.com/sonoou/"
 MYGIT_DIR=(customCommand Desktop/Java_Manish_sir Desktop/myprojects Desktop/Books_and_Notes/C_lang)
 MYGIT_REPO=(custom_command Java_Practice myprojects C_lang)
 
+
+
 make_push(){
-	echo -e "Pushing objects to ${1} \t\t\c"
+	#echo -e "Pushing objects to ${1} \t\t\c"
 	TIME="$(date +'%d%b%Y, %I:%M%p')"
 	echo "[${TIME}]" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
-	echo "Pushing objects to ${1}" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+
+	echo "adding objects to ${1}" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 	git add *
-	git commit -m "${TIME}"
-	git push "https://${MYGIT_USER}:${MYGIT_PASS}@github.com/sonoou/${1}.git" 2>> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
-	echo -e "\n\n\c" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 	if [ $? -eq 0 ]; then
+		if [ "${VERBOOSE}" == "true" ]; then
+			echo "added successfully"
+			echo "commiting object to ${1}"
+		fi
+	else
+		echo "error see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
 		exit 1
 	fi
+
+	git commit -m "${TIME}"
+	if [ $? -eq 0 ]; then
+		if [ "${VERBOOSE}" == "true" ]; then
+			echo "commited successfully"
+			echo "pushing object to ${1}"
+		fi
+	else
+		echo "error see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		exit 1
+	fi
+
+	git push "https://${MYGIT_USER}:${MYGIT_PASS}@github.com/sonoou/${1}.git" 2>> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+	if [ $? -eq 0 ]; then
+		if [ "${VERBOOSE}" == "true" ]; then
+			echo "pushed successfully"
+		fi
+	else
+		echo "error see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		exit 1
+	fi
+
+	echo -e "\n\n\c" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 }
 
 for(( i=0 ; i<=${#MYGIT_DIR[@]} ; i++ ))
