@@ -6,6 +6,7 @@ YAXIS=520
 MTIME="0.1"
 
 xdotool mousemove $XAXIS $YAXIS
+sleep 0.3
 xdotool click 1
 sleep $MTIME
 xdotool mousemove $(( XAXIS + 80 )) $(( YAXIS + 55 ))

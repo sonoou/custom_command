@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+APK_LIST=$(ls | tr " " "\n")
+
+for APK in $APK_LIST
+do
+	EXT="${APK##*.}"
+	if [[ "$EXT" != "apk" ]]; then
+		echo -e "[INSTALLING]\t$APK"
+		unzip $APK -d ../extr/ > /dev/null
+		if [[ -n $(adb install-multiple ../extr/*.apk | grep "Success") ]]; then
+			echo -e "[DONE]\t\t$APK"
+		fi
+		rm -r ../extr/
+	else
+		echo -e "[INSTALLING]\t$APK"
+		if [[ -n $(adb install "$APK" | grep "Success") ]]; then
+			echo -e "[DONE]\t\t$APK"
+		fi
+	fi
+done
+
+

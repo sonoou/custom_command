@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo -e "Enter HR Or Receiver name: \c"
+read RECEIVER_NAME
+
+echo -e "Enter role name: \c"
+read ROLE_NAME
+
+echo -e "Enter company name: \c"
+read COMPANY_NAME
+
+echo -e "Enter Job ids(separate using comma): \c"
+read JOB_IDS
+
+MESSAGE="Hi ${RECEIVER_NAME},"
+MESSAGE="${MESSAGE}\n\nI hope you're doing well! I'm reaching out to you because I came across opportunity for"
+MESSAGE="${MESSAGE} ${ROLE_NAME} role at ${COMPANY_NAME} that closely matches my skills and career aspirations."
+if [[ -n "${JOB_IDS}" ]]; then
+	MESSAGE="${MESSAGE}\n\nJob IDs: ${JOB_IDS}"
+fi
+MESSAGE="${MESSAGE}\n\nIf possible, could you kindly refer me for these positions? I would greatly appreciate your support and guidance in this process."
+MESSAGE="${MESSAGE}\n\nThank you for your time and help!"
+MESSAGE="${MESSAGE}\n\nBest regards,"
+MESSAGE="${MESSAGE}\nSonu"
+echo -e "${MESSAGE}"
+echo -e "${MESSAGE}" | xclip -selection c

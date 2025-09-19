@@ -13,7 +13,6 @@ com.facebook.system                        Facebook_App_Installer
 com.facebook.appmanager                    Facebook_App_Manager
 com.facebook.services                      Facebook_Services
 com.android.simappdialog                   Sim_app_dialogue
-com.android.chrome                         Google_chrome
 com.google.android.youtube                 Youtube
 com.mintgames.zentriple3d                  Zen_Triple
 com.xiaomi.mi_care                         Xiaomi_Service+
@@ -30,4 +29,12 @@ com.google.android.apps.podcasts           Google_Podcasts
 com.micredit.in                            Mi_Credit
 cn.wps.xiaomi.abroad.lite                  Mi_Doc_Viewer(Powered_by_WPS)
 com.miui.android.fashiongallery            Wallpaper_Carousel
-com.android.vending	                       Play_store
+com.eterno                                 DailyHunt
+com.opera.mini.native                      Opera Mini
+com.gaana                                  Gaana
+com.funnypuri.client                       Zili
+app.buzz.share                             Helo
+com.google.android.music                   Google_Play_Music
+com.google.android.apps.nbu.files          Files
+#com.android.vending	                     Play_store
+#com.android.chrome                        Google_chrome

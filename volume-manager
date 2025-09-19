@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -n "$(pgrep headphone100)" ]; then
+	kill $(pgrep headphone100)
+	amixer -c 0 set Headphone 9% unmute > /dev/null
+	amixer -c 0 set Speaker 50% unmute > /dev/null
+	amixer -c 0 set Master 100% unmute > /dev/null
+	echo "Master[100] Speaker[50] Headphone[9]"
+else
+	headphone100 100 &
+	echo -e "Master[100] Speaker[9] Headphone[100]\c\c"
+fi

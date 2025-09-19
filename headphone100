@@ -1,11 +1,10 @@
 #!/usr/bin/bash
 
-echo " "
 while true
 do
 amixer -c 0 set Headphone "$1%" unmute > /dev/null
 amixer -c 0 set Speaker 9% unmute > /dev/null
 amixer -c 0 set Master 100% unmute  > /dev/null
-echo -e "\033[1A Master 100% Speaker 9% Headphone $1%"
+#echo -e "\033[1A Master 100% Speaker 9% Headphone $1%"
 sleep 1 > /dev/null
 done

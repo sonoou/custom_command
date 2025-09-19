@@ -1,0 +1,58 @@
+#!/bin/bash
+
+PACKAGE="$1"
+package_suffix=""
+PACKAGE_NAME="$1"
+
+print_status() {
+		#clear
+		echo -e "\033c" >&2
+		echo -e "Current package name: ${package_suffix}\c" >&2
+		if [[ -z $package_suffix ]]; then
+	    echo "${PACKAGE}" >&2
+		else
+	    echo "${PACKAGE#com}" >&2
+		fi
+    echo -n "Enter package name: $package_suffix" >&2
+}
+
+create_package(){
+	print_status
+
+	while true; do
+    # Read one character silently (-s) without enter (-n1)
+    read -rsn1 key
+
+    case "$key" in
+          "")  # ENTER key
+				      	if [[ -z $package_suffix ]]; then
+    		  				PACKAGE="${package_suffix}${PACKAGE}"
+		    	  		else
+						      PACKAGE="${package_suffix}${PACKAGE#com}"
+      					fi
+								#echo -e "\n" >&2
+                break
+                ;;
+      $'\x7f')  # Backspace key
+  		          package_suffix="${package_suffix%?}"
+      		      ;;
+            *)
+                package_suffix+="$key"
+                ;;
+    esac
+
+    print_status
+	done
+}
+
+create_package
+#echo "$PACKAGE"
+# Strict regex: segments start with lowercase letter, only [a-z0-9_]
+if [[ "$PACKAGE" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
+	echo -e "\033cPackage name: \c" >&2
+	echo  "$PACKAGE"
+else
+  echo "Invalid package name: $PACKAGE" >&2
+	./package "$PACKAGE_NAME"
+fi
+

@@ -55,7 +55,7 @@ xdotool click 1
 while true;
 do
 	xdotool key Print
-  sleep 0.5
+ 	sleep 0.5
 	xdotool key space
 	sleep 0.5
 	CURRENT_IMAGE=$(echo "$SSDIR/$(ls $SSDIR -r | head -1 | tail -1)")

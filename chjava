@@ -19,7 +19,7 @@ do
 	fi
 done
 echo -e "$INSTALLED_JDKS_COLOR"
-echo -e "     5  Exit"
+echo -e "     $(( TOTAL_JDKS+1 ))  Exit"
 echo -e "\n\tPlease enter index no: \c"
 
 read newPath
@@ -31,7 +31,7 @@ elif [ -z "$newPath" ]; then
 	echo -e "\tonly number is allowed"
 	chjava
 	exit
-elif [ $newPath -eq 5 ]; then
+elif [ $newPath -eq $(( TOTAL_JDKS+1 )) ]; then
 	echo "Bye"
 	exit
 fi
