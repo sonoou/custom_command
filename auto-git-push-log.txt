@@ -73,3 +73,8 @@ fatal: unable to access 'https://github.com/sonoou/custom_command.git/': Could n
 
 [19Sep2025, 02:24PM]
 Pushing objects to custom_command
+fatal: unable to access 'https://github.com/sonoou/custom_command.git/': Could not resolve host: github.com
+
+
+[19Sep2025, 02:24PM]
+Pushing objects to custom_command
