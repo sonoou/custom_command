@@ -12,15 +12,16 @@ MYDIR_ROOT="/home/sonu"
 MYGIT_ROOT="github.com/sonoou/"
 MYGIT_DIR=(customCommand Desktop/Java_Manish_sir Desktop/myprojects Desktop/Books_and_Notes/C_lang)
 MYGIT_REPO=(custom_command Java_Practice myprojects C_lang)
-
+MYGIT_LOG="${MYDIR_ROOT}/.auto-git-push-log.txt"
 
 
 make_push(){
 	#echo -e "Pushing objects to ${1} \t\t\c"
-	TIME="$(date +'%d%b%Y, %I:%M%p')"
-	echo "[${TIME}]" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
 
-	echo "adding objects to ${1}.git" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+	TIME="$(date +'%d%b%Y, %I:%M%p')"
+	echo "[${TIME}]" >> "${MYGIT_LOG}"
+
+	echo "adding objects to ${1}.git" >> "${MYGIT_LOG}"
 	git add *
 	if [ $? -eq 0 ]; then
 		if [ "${VERBOOSE}" == "true" ]; then
@@ -28,7 +29,7 @@ make_push(){
 			echo "commiting object to ${1}.git"
 		fi
 	else
-		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYGIT_LOG}"
 		exit 1
 	fi
 
@@ -39,21 +40,21 @@ make_push(){
 			echo "pushing object to ${1}.git"
 		fi
 	else
-		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt"
+		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYGIT_LOG}"
 		exit 1
 	fi
 
-	git push "https://${MYGIT_USER}:${MYGIT_PASS}@github.com/sonoou/${1}.git" 2>> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+	git push "https://${MYGIT_USER}:${MYGIT_PASS}@github.com/sonoou/${1}.git" 2>> "${MYGIT_LOG}"
 	if [ $? -eq 0 ]; then
 		if [ "${VERBOOSE}" == "true" ]; then
 			echo "pushed successfully"
 		fi
 	else
-		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs $MYDIR_ROOT/customCommand/auto-git-push-log.txt"
+		echo -e "\033[1;38;5;9m[ERROR]:\033[0m see logs ${MYGIT_LOG}"
 		exit 1
 	fi
 
-	echo -e "\n\n\c" >> ${MYDIR_ROOT}/customCommand/auto-git-push-log.txt
+	echo -e "\n\n\c" >> "${MYGIT_LOG}"
 }
 
 for(( i=0 ; i<=${#MYGIT_DIR[@]} ; i++ ))
