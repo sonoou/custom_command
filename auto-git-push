@@ -59,6 +59,9 @@ make_push(){
 
 for(( i=0 ; i<=${#MYGIT_DIR[@]} ; i++ ))
 do
+		if [ "${VERBOOSE}" == "true" ]; then
+			echo "pushed successfully"
+		fi
 	echo "going to ${MYDIR_ROOT}/${MYGIT_DIR[i]}"
 	cd "${MYDIR_ROOT}/${MYGIT_DIR[i]}"
 	make_push "${MYGIT_REPO[i]}"
